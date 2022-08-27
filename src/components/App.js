@@ -13,10 +13,10 @@ export class App extends Component {
     filter: '',
   };
 
-  deleteContact = e => {
+  deleteContact = id => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(
-        contact => contact.id !== e.target.id
+        contact => contact.id !== id
       ),
     }));
   };
@@ -42,6 +42,24 @@ export class App extends Component {
       };
     });
   };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const contactsParse = JSON.parse(contacts);
+
+    if (contactsParse) {
+      this.setState({contacts : contactsParse});
+    }
+
+
+  }
+
+  componentDidUpdate(prevProps,prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+    }
+
+  }
 
   render() {
     return (
